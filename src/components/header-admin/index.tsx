@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Header() {
+export default function HeaderAdmin() {
   const navigate = useNavigate();
   return (
     <div className="bg-primary flex justify-between items-center p-2">
@@ -15,8 +15,13 @@ export default function Header() {
           <Link to="/quemsomos">Quem Somos</Link>
         </li>
         <li>
-          <button onClick={()=>navigate("/login")} className="bg-secundary px-8 py-2 rounded-md transition-all hover:bg-orange-600">
-            Entrar
+          <button onClick={()=>navigate("/login")}>
+            Sair
+          </button>
+        </li>
+        <li>
+          <button onClick={()=>navigate("/login")} className="bg-white px-8 py-2 rounded-md transition-all text-secundary">
+            Anunciar
           </button>
         </li>
       </ul>
