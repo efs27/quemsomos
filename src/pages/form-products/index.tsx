@@ -70,11 +70,6 @@ export default function FormProduct() {
               <option value={"Roupas"}>Roupas</option>
               <option value={"Veiculos"}>Veículos</option>
             </select>
-            {/* <input
-              {...register("category")}
-              placeholder="Categoria"
-              className="w-full border-2 h-[40px] px-2 rounded-md mt-3"
-            />*/}
             {errors.category && (
               <span className="text-red-600">{errors.category.message}</span>
             )}

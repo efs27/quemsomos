@@ -1,3 +1,10 @@
 * {
   font-family: "Ubuntu", sans-serif;
 }
+
+.Toastify__toast--error {
+  background-color: #ff4f4f;
+  font-weight: bold;
+  text-shadow: 1px 1px black;
+}
+

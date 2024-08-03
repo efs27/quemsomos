@@ -1,6 +1,6 @@
 import Details from "./pages/details";
 import Home from "./pages/home";
-import ListProducts from "./pages/list-products";
+import ListRecentsProducts from "./pages/list-recents-products";
 import NotFound from "./pages/not-found";
 import SearchProducts from "./pages/search-result";
 import "./styles.css";
@@ -13,6 +13,8 @@ import Dashboard from "./pages/dashboard";
 import UserProducts from "./pages/user-products";
 import FormProduct from "./pages/form-products";
 import ContactForm from "./pages/contact-form";
+import ListAllProducts from "./pages/list-all-products";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -21,20 +23,20 @@ export default function App() {
       element: <Home />,
     },
     {
-      path: "/products",
-      element: <ListProducts />,
+      path: "/all-recents-products",
+      element: <ListRecentsProducts />,
     },
     {
-      path: "/products/details",
+      path: "/all-products",
+      element: <ListAllProducts />,
+    },
+    {
+      path: "/products/details/:id",
       element: <Details />,
     },
     {
-      path: "/products/search",
+      path: "/products/search/:product",
       element: <SearchProducts />,
-    },
-    {
-      path: "*",
-      element: <NotFound />,
     },
     {
       path: "/quemsomos",
@@ -71,6 +73,7 @@ export default function App() {
   ]);
   return (
     <div>
+      <ToastContainer />
       <RouterProvider router={router} />
     </div>
   );

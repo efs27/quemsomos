@@ -1,5 +1,4 @@
 import { LuGamepad2 } from "react-icons/lu";
-import CardProduct from "../../components/card-product";
 import { GiClothes } from "react-icons/gi";
 import { AiFillCar, AiOutlineGift, AiOutlineSync } from "react-icons/ai";
 import { FaTools } from "react-icons/fa";
@@ -10,7 +9,6 @@ import carousel_2 from "../../assets/carousel_2.png";
 import carousel_3 from "../../assets/carousel_3.png";
 import { useNavigate } from "react-router-dom";
 import AdminTemplate from "../../templates/admin-template";
-import CardProductAdimin from "../../components/card-product-admin";
 const itensCategory = [
   {
     id: 0,
@@ -75,16 +73,6 @@ export default function Dashboard() {
 
       <h2 className="mt-[50px]">Itens recentes</h2>
       <div className="flex flex-wrap">
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
       </div>
       <p className="mt-4">Ver mais</p>
 
@@ -106,15 +94,6 @@ export default function Dashboard() {
       </div>
       <h2 className="mt-[50px]">Anúncios</h2>
       <div className="flex flex-wrap">
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
       </div>
       <p className="mt-4">Ver mais</p>
     </AdminTemplate>
