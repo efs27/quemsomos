@@ -1,8 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import img_produto from "../../assets/product.png";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import Modal from "react-modal";
 import { useState } from "react";
+import { removeApiProduct } from "./services";
+import { CardProps } from "./types";
+import { toast } from "react-toastify";
+import { Alerta } from "../../alerta";
+import "react-toastify/dist/ReactToastify.css";
+import { getApiMyProduct } from "../../pages/user-products/services";
+import { useAuthSessionStore } from "../../hooks/use-auth-session";
 
 const customStyles = {
   overlay: {
@@ -20,25 +26,35 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-export default function CardProductAdimin() {
+export default function CardProductAdimin(props: CardProps) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { token } = useAuthSessionStore();
 
-  {
-    /*  onClick={() => navigate("/products/details")} */
+  async function removProduct() {
+    try {
+      await removeApiProduct(props.id, token);
+      const response = await getApiMyProduct(token);
+      props.setMyProducts(response.data);
+      setIsOpen(false);
+      toast.info("Produto removido com sucesso", Alerta);
+    } catch (error) {
+      toast.error("Erro ao remover produto", Alerta);
+    }
   }
+
   return (
     <div>
       <button className="shadow-md rounded-md p-6 flex flex-col justify-center items-center m-2">
-        <h1 className="text-center">Nome do Produto</h1>
-        <img src={img_produto} className="w-[100px] mt-2"></img>
+        <h1 className="text-center">{props.name}</h1>
+        <img src={props.img} className="w-[100px] mt-2"></img>
         <div className="flex flex-row items-end">
           <div>
-            <p className="w-full mt-3">Amazon</p>
-            <p className="w-full text-[25px]">R$ 799,00</p>
+            <p className="w-full mt-3">{props.manufacturer}</p>
+            <p className="w-full text-[25px]">R$ {props.price}</p>
           </div>
-          <div className="ml-2 flex flex-col gap-2">
-            <button onClick={() => alert("clicou")}>
+          <div className="ml-2 flex flex-col gap-1">
+            <button onClick={() => navigate(`/form-product-edit/${props.id}`)}>
               <AiOutlineEdit size={25} />
             </button>
             <button onClick={() => setIsOpen(true)}>
@@ -55,7 +71,10 @@ export default function CardProductAdimin() {
         <h1 className="text-[20px] font-bold mb-2">Excluir Produto</h1>
         <p>Deseja realmente excluir esse produto?</p>
         <div className="flex justify-center gap-4 mt-4">
-          <button className="bg-primary text-white px-8 py-2 rounded-lg">
+          <button
+            onClick={() => removProduct()}
+            className="bg-primary text-white px-8 py-2 rounded-lg"
+          >
             Sim
           </button>
           <button

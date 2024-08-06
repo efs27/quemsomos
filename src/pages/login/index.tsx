@@ -3,6 +3,11 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import { auth } from "./services";
+import { toast } from "react-toastify";
+import { Alerta } from "../../alerta";
+import 'react-toastify/dist/ReactToastify.css';
+import { useAuthSessionStore } from "../../hooks/use-auth-session";
 
 type LoginForm = {
   email: string;
@@ -19,6 +24,7 @@ const SchemaValidation = Yup.object().shape({
 });
 
 export default function Login() {
+  const {setToken} = useAuthSessionStore();
   const navigate = useNavigate();
 
   const {
@@ -27,8 +33,14 @@ export default function Login() {
     formState: { errors },
   } = useForm<LoginForm>({ resolver: yupResolver(SchemaValidation) });
 
-  function logar(values: LoginForm) {
-    console.log("Logou!");
+  async function logar(values: LoginForm) {
+    try {
+      const response = await auth(values.email, values.password);
+      setToken(response.data?.token)
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error("Erro ao logar, tente novamente", Alerta);
+    }
   }
 
   return (

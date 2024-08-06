@@ -3,15 +3,11 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-
-type RegisterForm = {
-  name: string;
-  email: string;
-  phone: string;
-  city: string;
-  state: string;
-  password: string;
-};
+import { RegisterForm } from "./types";
+import { registerUser } from "./service";
+import { toast } from "react-toastify";
+import { Alerta } from "../../alerta";
+import 'react-toastify/dist/ReactToastify.css';
 
 const SchemaValidation = Yup.object().shape({
   name: Yup.string().required("O campo é obrigatório"),
@@ -28,14 +24,24 @@ const SchemaValidation = Yup.object().shape({
 
 export default function Register() {
   const navigate = useNavigate();
-
-  function createUser(values: RegisterForm) {}
-
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegisterForm>({ resolver: yupResolver(SchemaValidation) });
+
+  async function createUser(values: RegisterForm) {
+    try {
+      const response = await registerUser(values);
+      reset()
+    } catch (error) {
+      toast.error(
+        "Não foi possível fazer login, revise os campos e tente novamente.",
+        Alerta
+      );
+    }
+  }
 
   return (
     <AuthTemplate>
@@ -109,11 +115,11 @@ export default function Register() {
           type="submit"
           className="mt-4 bg-primary w-full h-[40px] text-white"
         >
-          Entrar
+          Cadastrar
         </button>
         <div className="flex justify-center items-center">
-          <button className="mt-4" onClick={() => navigate("/register")}>
-            Cadastre-se
+          <button className="mt-4" onClick={() => navigate("/login")}>
+            Entrar
           </button>
         </div>
       </form>

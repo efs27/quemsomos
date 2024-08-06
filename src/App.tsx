@@ -11,10 +11,11 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import UserProducts from "./pages/user-products";
-import FormProduct from "./pages/form-products";
+import FormProduct from "./pages/form-product";
 import ContactForm from "./pages/contact-form";
 import ListAllProducts from "./pages/list-all-products";
 import { ToastContainer } from "react-toastify";
+import FormProductEdit from "./pages/form-product-edit";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -65,6 +66,10 @@ export default function App() {
     {
       path: "/contact",
       element: <ContactForm />,
+    },
+    {
+      path: "/form-product-edit/:id",
+      element: <FormProductEdit />,
     },
     {
       path: "*",

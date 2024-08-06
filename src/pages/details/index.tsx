@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { Product } from "./types";
 import { toast } from "react-toastify";
 import { Alerta } from "../../alerta";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { formatPrice } from "../../utils/format-price";
 
 export default function Details() {
   const params = useParams();
@@ -23,7 +24,7 @@ export default function Details() {
   }
 
   useEffect(() => {
-    getDetailsProduct()
+    getDetailsProduct();
   }, []);
 
   return (
@@ -45,13 +46,15 @@ export default function Details() {
         </div>
         <div className="shadow-sm bg-white px-10 py-2">
           <p>Informações do vendedor</p>
-          <p>Emerson Freitas da Silva</p>
-          <p>Maringá Pr</p>
-          <p>Email: emersonfreitassilva@hotmail.com</p>
-          <p>(44) - 988283524</p>
+          <p>Nome: {product.user?.name || "-"}</p>
+          <p>
+            Cidade: {product.user?.city} Estado: {product.user?.state}
+          </p>
+          <p>Email: {product.user?.email}</p>
+          <p>Telefone: {product.user?.phone}</p>
         </div>
         <div className="shadow-sm mt-4 bg-white px-10 py-2">
-          <p className="text-[30px]">R$ {product.price}</p>
+          <p className="text-[30px]">{formatPrice(product.price)}</p>
         </div>
       </div>
       <h3 className="mt-10 text-[20px]">Detalhes do produto!</h3>

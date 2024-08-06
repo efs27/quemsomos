@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { CardProducts } from "./types";
+import { CardProps } from "./types";
 
-export default function CardProduct(props: CardProducts) {
+export default function CardProduct(props: CardProps) {
   const navigate = useNavigate();
 
   return (

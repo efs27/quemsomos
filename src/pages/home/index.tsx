@@ -16,7 +16,8 @@ import { Product } from "./types";
 import ListLoading from "../../components/list-loading";
 import { toast } from "react-toastify";
 import { Alerta } from "../../alerta";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { useAuthSessionStore } from "../../hooks/use-auth-session";
 
 const itensCategory = [
   {
@@ -57,7 +58,14 @@ const itensCategory = [
 ];
 
 export default function Home() {
+  const { token } = useAuthSessionStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const [recentsProducts, setRecentsProducts] = useState<Product[]>([]);
   const [recommendedsProducts, setRecommendedsProducts] = useState<Product[]>(

@@ -1,4 +1,5 @@
 import { LuGamepad2 } from "react-icons/lu";
+import CardProduct from "../../components/card-product";
 import { GiClothes } from "react-icons/gi";
 import { AiFillCar, AiOutlineGift, AiOutlineSync } from "react-icons/ai";
 import { FaTools } from "react-icons/fa";
@@ -7,8 +8,16 @@ import { Carousel } from "react-responsive-carousel";
 import carousel_1 from "../../assets/carousel_1.png";
 import carousel_2 from "../../assets/carousel_2.png";
 import carousel_3 from "../../assets/carousel_3.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getApiRecentsProducts, getApiRecommendedsProducts } from "./service";
+import { useEffect, useState } from "react";
+import { Product } from "./types";
+import ListLoading from "../../components/list-loading";
+import { toast } from "react-toastify";
+import { Alerta } from "../../alerta";
+import 'react-toastify/dist/ReactToastify.css';
 import AdminTemplate from "../../templates/admin-template";
+
 const itensCategory = [
   {
     id: 0,
@@ -49,6 +58,48 @@ const itensCategory = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
+
+  const [recentsProducts, setRecentsProducts] = useState<Product[]>([]);
+  const [recommendedsProducts, setRecommendedsProducts] = useState<Product[]>(
+    []
+  );
+
+  const [isLoadingRecentsProducts, setIsLoadingRecentsProducts] =
+    useState(false);
+  const [isLoadingRecommendedsProducts, setIsLoadingRecommendedsProducts] =
+    useState(false);
+  const [inputSearch, setInputSearch] = useState("");
+
+  async function getRecentsProducts() {
+    setIsLoadingRecentsProducts(true);
+    try {
+      const response = await getApiRecentsProducts();
+      setRecentsProducts(response.data);
+    } catch (error) {
+      toast.error("Houve um erro ao buscar produtos recentes", Alerta);
+    }
+    setIsLoadingRecentsProducts(false);
+  }
+
+  async function getRecommendedsProducts() {
+    setIsLoadingRecommendedsProducts(true);
+    try {
+      const response = await getApiRecommendedsProducts();
+      setRecommendedsProducts(response.data);
+    } catch (error) {
+      toast.error("Houve um erro ao buscar produtos recomendados", Alerta);
+    }
+    setIsLoadingRecommendedsProducts(false);
+  }
+
+  useEffect(() => {
+    getRecentsProducts();
+  }, []);
+
+  useEffect(() => {
+    getRecommendedsProducts();
+  }, []);
+
   return (
     <AdminTemplate>
       <div className="max-w-[70%] self-center">
@@ -64,23 +115,43 @@ export default function Dashboard() {
           </div>
         </Carousel>
         <div className="flex flex-row bg-gray-100 h-[45px] rounded-md border-2 items-center mt-10">
-          <input className="flex-1 h-full p-3" placeholder="Pesquisar por..." />
-          <button onClick={() => navigate("/products/search")} className="px-4">
+          <input
+            className="flex-1 h-full p-3"
+            placeholder="Pesquisar por..."
+            onChange={(event) => setInputSearch(event.target.value)}
+          />
+          <button
+            onClick={() => navigate(`/products/search/${inputSearch}`)}
+            className="px-4"
+          >
             <IoSearch size={30} />
           </button>
         </div>
       </div>
 
       <h2 className="mt-[50px]">Itens recentes</h2>
+      {isLoadingRecentsProducts && <ListLoading />}
       <div className="flex flex-wrap">
+        {recentsProducts.map((product) => (
+          <CardProduct
+            id={product._id}
+            key={product._id}
+            name={product.name}
+            img={product.url1}
+            manufacturer={product.manufacturer}
+            price={product.price}
+          />
+        ))}
       </div>
-      <p className="mt-4">Ver mais</p>
-
+      <Link to="/all-recents-products">
+        <p className="mt-4">Ver todos os produtos recentes</p>
+      </Link>
       <div className="bg-primary p-10 rounded-lg mt-[50px]">
         <h2 className="text-white tex-[20px] mb-5">Categorias</h2>
         <div className="flex justify-between px-[10%]">
-          {itensCategory.map((category) => (
+          {itensCategory.map((category, index) => (
             <button
+              key={index}
               onClick={() => navigate("/products/search")}
               className="flex flex-col justify-center items-center"
             >
@@ -93,9 +164,22 @@ export default function Dashboard() {
         </div>
       </div>
       <h2 className="mt-[50px]">Anúncios</h2>
+      {isLoadingRecommendedsProducts && <ListLoading />}
       <div className="flex flex-wrap">
+        {recommendedsProducts.map((product) => (
+          <CardProduct
+            id={product._id}
+            key={product._id}
+            img={product.url1}
+            manufacturer={product.manufacturer}
+            name={product.name}
+            price={product.price}
+          />
+        ))}
       </div>
-      <p className="mt-4">Ver mais</p>
+      <Link to="/all-products">
+        <p className="mt-4">Ver todos os produtos</p>
+      </Link>
     </AdminTemplate>
   );
 }

@@ -7,5 +7,5 @@ export type Product = {
     price: number;
     url1: string;
     url2: string;
-    description: string;
+    description?: string;
   };
